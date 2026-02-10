@@ -1,7 +1,7 @@
 // ---------------------------------------------------------
 // CONFIGURACIÓN
 // ---------------------------------------------------------
-const API_URL = "http://localhost:5280/api/Projects";
+const API_URL = "https://spotlight-api-m2kt.onrender.com";
 
 // ---------------------------------------------------------
 // UTILIDADES — Toast Notifications
