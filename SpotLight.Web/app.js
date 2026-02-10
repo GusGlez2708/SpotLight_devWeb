@@ -104,10 +104,10 @@ async function cargarProyectos() {
                     </div>
                     <div class="score-box">
                         <div class="score-value">
-                            <i class="fa-solid fa-star"></i>
-                            ${p.stats ? p.stats.averageScore.toFixed(1) : '0.0'}
+                            <i class="fa-solid fa-brain"></i>
+                            ${p.stats ? p.stats.puntuacionFactibilidad || p.stats.puntuacion_factibilidad || 0 : 0}%
                         </div>
-                        <div class="score-label">${p.stats ? p.stats.totalVotes : 0} Votos</div>
+                        <div class="score-label">${p.stats ? p.stats.totalEvaluaciones || 0 : 0} Eval.</div>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -171,7 +171,7 @@ async function crearProyecto(evento) {
         videoUrl: document.getElementById('videoUrl').value,
         equipoNumero: parseInt(document.getElementById('teamNo').value),
         members: [],
-        stats: { averageScore: 0, totalVotes: 0 },
+        stats: { puntuacionFactibilidad: 0, totalEvaluaciones: 0 },
         status: "activo"
     };
 
@@ -255,7 +255,7 @@ async function guardarEdicion(id, proyectoOriginal) {
         videoUrl: document.getElementById('editVideoUrl').value,
         equipoNumero: parseInt(document.getElementById('editTeamNo').value),
         members: proyectoOriginal.members || [],
-        stats: proyectoOriginal.stats || { averageScore: 0, totalVotes: 0 },
+        stats: proyectoOriginal.stats || { puntuacionFactibilidad: 0, totalEvaluaciones: 0 },
         status: proyectoOriginal.status || 'desactivado'
     };
 

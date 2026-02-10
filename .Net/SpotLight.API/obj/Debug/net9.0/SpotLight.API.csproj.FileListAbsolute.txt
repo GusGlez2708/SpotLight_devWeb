@@ -122,3 +122,4 @@ C:\dev\spotlight\dev_web\.net\spotlight.api\obj\Debug\net9.0\refint\SpotLight.AP
 C:\dev\spotlight\dev_web\.net\spotlight.api\obj\Debug\net9.0\SpotLight.API.pdb
 C:\dev\spotlight\dev_web\.net\spotlight.api\obj\Debug\net9.0\SpotLight.API.genruntimeconfig.cache
 C:\dev\spotlight\dev_web\.net\spotlight.api\obj\Debug\net9.0\ref\SpotLight.API.dll
+C:\dev\spotlight\dev_web\.net\spotlight.api\obj\Debug\net9.0\SpotLight.API.sourcelink.json

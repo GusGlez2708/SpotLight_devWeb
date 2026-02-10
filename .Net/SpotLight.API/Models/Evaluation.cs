@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace SpotLight.API.Models
 {
+    [BsonIgnoreExtraElements]
     public class Evaluation
     {
         [BsonId]
@@ -13,24 +14,51 @@ namespace SpotLight.API.Models
         [BsonElement("projectId")]
         public string ProjectId { get; set; } = null!;
 
+        [BsonElement("evaluatorId")]
+        public string EvaluatorId { get; set; } = null!;
+
         [BsonElement("scores")]
         public ScoreBreakdown Scores { get; set; } = new ScoreBreakdown();
-
-        [BsonElement("feedback")]
-        public string Feedback { get; set; } = string.Empty;
 
         [BsonElement("finalScore")]
         public double FinalScore { get; set; }
 
+        [BsonElement("resena_texto")]
+        public string ResenaTexto { get; set; } = string.Empty;
+
+        [BsonElement("aiAnalysis")]
+        public AiAnalysis AiAnalysis { get; set; } = new AiAnalysis();
+
         [BsonElement("createdAt")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public object? CreatedAt { get; set; }
     }
 
+    [BsonIgnoreExtraElements]
     public class ScoreBreakdown
     {
-        public int Innovation { get; set; }
-        public int Functionality { get; set; }
-        public int Ui { get; set; }
-        public int Impact { get; set; }
+        [BsonElement("innovacion")]
+        public int Innovacion { get; set; }
+
+        [BsonElement("funcionalidad")]
+        public int Funcionalidad { get; set; }
+
+        [BsonElement("diseno_ux")]
+        public int DisenoUx { get; set; }
+
+        [BsonElement("impacto")]
+        public int Impacto { get; set; }
+    }
+
+    [BsonIgnoreExtraElements]
+    public class AiAnalysis
+    {
+        [BsonElement("puntuacion_factibilidad")]
+        public double PuntuacionFactibilidad { get; set; }
+
+        [BsonElement("fortalezas")]
+        public List<string> Fortalezas { get; set; } = new List<string>();
+
+        [BsonElement("nivel_riesgo")]
+        public string NivelRiesgo { get; set; } = string.Empty;
     }
 }

@@ -41,10 +41,10 @@ namespace SpotLight.API.Models
     [BsonIgnoreExtraElements]
     public class ProjectStats
     {
-        [BsonElement("averageScore")]
-        public double AverageScore { get; set; } = 0;
+        [BsonElement("puntuacion_factibilidad")]
+        public double PuntuacionFactibilidad { get; set; } = 0;
 
-        [BsonElement("totalVotes")]
-        public int TotalVotes { get; set; } = 0;
+        [BsonElement("totalEvaluaciones")]
+        public int TotalEvaluaciones { get; set; } = 0;
     }
 }

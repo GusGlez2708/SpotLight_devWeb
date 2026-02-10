@@ -26,6 +26,10 @@ namespace SpotLight.API.Services
         public async Task<Evaluation?> GetAsync(string id) =>
             await _evaluationsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
+        // Obtener todas las evaluaciones de un proyecto específico
+        public async Task<List<Evaluation>> GetByProjectIdAsync(string projectId) =>
+            await _evaluationsCollection.Find(x => x.ProjectId == projectId).ToListAsync();
+
         public async Task CreateAsync(Evaluation newEvaluation) =>
             await _evaluationsCollection.InsertOneAsync(newEvaluation);
     }
