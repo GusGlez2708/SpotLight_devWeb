@@ -1,21 +1,24 @@
-# Imagen base para compilar
+# Etapa de compilación
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-# Copiamos el proyecto y restauramos librerías
-COPY *.csproj ./
-RUN dotnet restore
+# Copiamos el archivo de proyecto usando la ruta desde la raíz del repo
+COPY [".Net/SpotLight.API/SpotLight.API.csproj", ".Net/SpotLight.API/"]
+RUN dotnet restore ".Net/SpotLight.API/SpotLight.API.csproj"
 
-# Copiamos todo lo demás y publicamos
-COPY . ./
-RUN dotnet publish -c Release -o out
+# Copiamos todo el contenido del repositorio
+COPY . .
 
-# Imagen final para correr la app
+# Nos movemos a la carpeta del proyecto para compilar
+WORKDIR "/src/.Net/SpotLight.API"
+RUN dotnet publish "SpotLight.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# Etapa final (ejecución)
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
-COPY --from=build /app/out .
+COPY --from=build /app/publish .
 
-# Render usa el puerto 8080 por defecto en Docker
+# Render usa el puerto 8080 por defecto
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
