@@ -37,6 +37,40 @@ document.addEventListener('click', (e) => {
 });
 
 // ---------------------------------------------------------
+// UTILIDAD: Recalcular Estadísticas (Sync)
+// ---------------------------------------------------------
+async function recalcularEstadisticas() {
+    const btn = document.querySelector('.btn-refresh[title="Recalcular estadísticas de IA"]');
+    if (!btn) return;
+
+    const originalContent = btn.innerHTML;
+
+    try {
+        btn.innerHTML = '<i class="fa-solid fa-spin fa-spinner"></i> Sincronizando...';
+        btn.disabled = true;
+
+        const response = await fetch(`${API_URL}/recalculate-stats`, {
+            method: 'POST'
+        });
+
+        if (!response.ok) throw new Error('Error al sincronizar');
+
+        const data = await response.json();
+        showToast(data.message || 'Datos sincronizados correctamente', 'success');
+
+        // Recargar la lista de proyectos para ver los cambios
+        await cargarProyectos();
+
+    } catch (error) {
+        console.error(error);
+        showToast('Error al sincronizar datos', 'error');
+    } finally {
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+    }
+}
+
+// ---------------------------------------------------------
 // 1. FUNCIÓN: Cargar Proyectos (GET)
 // ---------------------------------------------------------
 async function cargarProyectos() {

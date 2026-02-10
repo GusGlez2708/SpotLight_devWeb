@@ -10,7 +10,6 @@ namespace SpotLight.API.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
 
-        [BsonRepresentation(BsonType.ObjectId)]
         [BsonElement("projectId")]
         public string ProjectId { get; set; } = null!;
 

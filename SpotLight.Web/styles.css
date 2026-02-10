@@ -361,6 +361,11 @@ body::before {
     margin-bottom: 1.5rem;
 }
 
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
 .section-title {
     font-size: 1.3rem;
     font-weight: 700;

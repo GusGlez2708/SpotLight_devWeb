@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SpotLight — Admin Panel</title>
-    <meta name="description" content="Panel de administración de proyectos SpotLight. Gestiona, evalúa y controla tus proyectos.">
+    <meta name="description"
+        content="Panel de administración de proyectos SpotLight. Gestiona, evalúa y controla tus proyectos.">
     <link rel="icon" href="logo.png" type="image/png">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
+
 <body>
 
     <!-- Navbar -->
@@ -50,7 +53,8 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="desc">Descripción</label>
-                    <textarea id="desc" class="form-textarea" rows="2" placeholder="Breve descripción del proyecto..."></textarea>
+                    <textarea id="desc" class="form-textarea" rows="2"
+                        placeholder="Breve descripción del proyecto..."></textarea>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="videoUrl">URL Video (MP4)</label>
@@ -72,9 +76,15 @@
                 <h2 class="section-title">
                     <i class="fa-solid fa-layer-group"></i> Proyectos
                 </h2>
-                <button onclick="cargarProyectos()" class="btn-refresh">
-                    <i class="fa-solid fa-arrows-rotate"></i> Refrescar
-                </button>
+                <div class="header-actions">
+                    <button onclick="recalcularEstadisticas()" class="btn-refresh"
+                        title="Recalcular estadísticas de IA">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Sincronizar Datos
+                    </button>
+                    <button onclick="cargarProyectos()" class="btn-refresh">
+                        <i class="fa-solid fa-arrows-rotate"></i> Refrescar
+                    </button>
+                </div>
             </div>
             <div id="projectsList" class="projects-grid">
                 <div class="loading-state">
@@ -93,7 +103,9 @@
                 <h3 class="modal-title">Eliminar Proyecto</h3>
             </div>
             <div class="modal-body">
-                <p>¿Estás seguro de que deseas eliminar <span id="deleteProjectName" class="project-name-highlight"></span>? Esta acción es <strong>permanente</strong> e irreversible.</p>
+                <p>¿Estás seguro de que deseas eliminar <span id="deleteProjectName"
+                        class="project-name-highlight"></span>? Esta acción es <strong>permanente</strong> e
+                    irreversible.</p>
             </div>
             <div class="modal-actions">
                 <button class="btn-modal btn-cancel" onclick="cerrarModal('deleteModal')">Cancelar</button>
@@ -154,4 +166,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>

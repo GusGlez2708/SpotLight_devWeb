@@ -9,9 +9,13 @@ namespace SpotLight.API.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly ProjectsService _projectsService;
+        private readonly EvaluationsService _evaluationsService;
 
-        public ProjectsController(ProjectsService projectsService) =>
+        public ProjectsController(ProjectsService projectsService, EvaluationsService evaluationsService)
+        {
             _projectsService = projectsService;
+            _evaluationsService = evaluationsService;
+        }
 
         [HttpGet]
         public async Task<List<Project>> Get() =>
@@ -37,6 +41,42 @@ namespace SpotLight.API.Controllers
             await _projectsService.CreateAsync(newProject);
 
             return CreatedAtAction(nameof(Get), new { id = newProject.Id }, newProject);
+        }
+
+        [HttpPost("recalculate-stats")]
+        public async Task<IActionResult> RecalculateStats()
+        {
+            var projects = await _projectsService.GetAsync();
+            int updatedCount = 0;
+            var detailedLogs = new List<string>();
+
+            foreach (var p in projects)
+            {
+                if (p.Id == null) continue;
+                
+                // Debug log
+                Console.WriteLine($"[Sync] Procesando proyecto: {p.Id} - {p.Title}");
+                detailedLogs.Add($"Procesando proyecto: {p.Id} - {p.Title}");
+
+                var evaluations = await _evaluationsService.GetByProjectIdAsync(p.Id);
+                
+                Console.WriteLine($"[Sync] Evaluaciones encontradas: {evaluations.Count}");
+                detailedLogs.Add($"Evaluaciones encontradas: {evaluations.Count}");
+
+                if (evaluations.Any())
+                {
+                    double avg = evaluations.Average(e => e.AiAnalysis.PuntuacionFactibilidad);
+                    Console.WriteLine($"[Sync] Nuevo promedio: {avg}");
+                    detailedLogs.Add($"Nuevo promedio: {avg}");
+                    
+                    p.Stats.PuntuacionFactibilidad = Math.Round(avg, 1);
+                    p.Stats.TotalEvaluaciones = evaluations.Count;
+                    
+                    await _projectsService.UpdateAsync(p.Id, p);
+                    updatedCount++;
+                }
+            }
+            return Ok(new { message = $"Recalculadas las estadísticas de {updatedCount} proyectos", logs = detailedLogs });
         }
 
         [HttpPut("{id:length(24)}")]
