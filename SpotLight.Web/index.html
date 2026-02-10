@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpotLight — Admin Panel</title>
+    <meta name="description" content="Panel de administración de proyectos SpotLight. Gestiona, evalúa y controla tus proyectos.">
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="#" class="navbar-brand">
+                <img src="logo.png" alt="SpotLight Logo" class="navbar-logo">
+                <div>
+                    <div class="navbar-title"><span>Spot</span>Light</div>
+                    <div class="navbar-subtitle">Admin Panel</div>
+                </div>
+            </a>
+            <div class="api-badge" id="apiBadge">API Conectada</div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+
+        <!-- Form Panel -->
+        <aside class="form-panel">
+            <div class="panel-header">
+                <i class="fa-solid fa-rocket"></i>
+                <h2 class="panel-title">Nuevo Proyecto</h2>
+            </div>
+            <form id="projectForm" onsubmit="crearProyecto(event)">
+                <div class="form-group">
+                    <label class="form-label" for="title">Nombre del Proyecto</label>
+                    <input type="text" id="title" class="form-input" placeholder="Ej: Eco-Dron Smart" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="category">Categoría</label>
+                    <select id="category" class="form-select">
+                        <option>Sustentabilidad</option>
+                        <option>Tecnología</option>
+                        <option>Salud</option>
+                        <option>Arte</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="desc">Descripción</label>
+                    <textarea id="desc" class="form-textarea" rows="2" placeholder="Breve descripción del proyecto..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="videoUrl">URL Video (MP4)</label>
+                    <input type="text" id="videoUrl" class="form-input" placeholder="https://..." required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="teamNo">Número de Equipo</label>
+                    <input type="number" id="teamNo" class="form-input" value="1" min="1">
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-paper-plane"></i> Publicar Proyecto
+                </button>
+            </form>
+        </aside>
+
+        <!-- Projects List -->
+        <section class="projects-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fa-solid fa-layer-group"></i> Proyectos
+                </h2>
+                <button onclick="cargarProyectos()" class="btn-refresh">
+                    <i class="fa-solid fa-arrows-rotate"></i> Refrescar
+                </button>
+            </div>
+            <div id="projectsList" class="projects-grid">
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>Conectando con el servidor...</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header danger">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <h3 class="modal-title">Eliminar Proyecto</h3>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar <span id="deleteProjectName" class="project-name-highlight"></span>? Esta acción es <strong>permanente</strong> e irreversible.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-cancel" onclick="cerrarModal('deleteModal')">Cancelar</button>
+                <button class="btn-modal btn-danger" id="btnConfirmDelete">
+                    <i class="fa-solid fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header edit">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <h3 class="modal-title">Editar Proyecto</h3>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="form-group">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" id="editTitle" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Categoría</label>
+                        <select id="editCategory" class="form-select">
+                            <option>Sustentabilidad</option>
+                            <option>Tecnología</option>
+                            <option>Salud</option>
+                            <option>Arte</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descripción</label>
+                        <textarea id="editDesc" class="form-textarea" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">URL Video</label>
+                        <input type="text" id="editVideoUrl" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Número de Equipo</label>
+                        <input type="number" id="editTeamNo" class="form-input" min="1">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-cancel" onclick="cerrarModal('editModal')">Cancelar</button>
+                <button class="btn-modal btn-primary" id="btnConfirmEdit">
+                    <i class="fa-solid fa-save"></i> Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
