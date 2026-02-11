@@ -14,6 +14,8 @@ const PREDEFINED_TECHS = [
     "PyTorch", "OpenCV", "Arduino", "Raspberry Pi", "IoT"
 ];
 
+const PREDEFINED_PLATFORMS = ["Web", "Móvil", "Web y Móvil"];
+
 const appState = {
     techs: { create: [], edit: [] }
 };
@@ -144,6 +146,20 @@ async function cargarProyectos() {
             const status = p.status || 'activo';
             const isActive = status === 'activo';
 
+            // Extract Platform from Techs[0]
+            let platform = 'Otro';
+            let displayTechs = p.technologies || [];
+            if (displayTechs.length > 0 && PREDEFINED_PLATFORMS.includes(displayTechs[0])) {
+                platform = displayTechs[0];
+                displayTechs = displayTechs.slice(1);
+            }
+
+            // Determine badge class
+            let badgeClass = 'otro';
+            if (platform === 'Web') badgeClass = 'web';
+            else if (platform === 'Móvil') badgeClass = 'movil';
+            else if (platform === 'Web y Móvil') badgeClass = 'both';
+
             const card = document.createElement('div');
             card.className = `project-card status-${status}`;
             card.style.animationDelay = `${index * 0.08}s`;
@@ -153,6 +169,9 @@ async function cargarProyectos() {
                     <div class="card-info">
                         <div class="card-badges">
                             <span class="badge-category">${p.category}</span>
+                            <span class="badge-platform ${badgeClass}">
+                                <i class="fa-solid fa-laptop-code"></i> ${platform}
+                            </span>
                             <span class="badge-status ${status}">
                                 <span class="badge-status-dot"></span>
                                 ${isActive ? 'Activo' : 'Desactivado'}
@@ -178,12 +197,12 @@ async function cargarProyectos() {
                         </div>
                     ` : ''}
                     
-                    ${(p.technologies && p.technologies.length > 0) ? `
+                    ${(displayTechs && displayTechs.length > 0) ? `
                         <div class="tech-tags-list" style="gap: 4px;">
-                            ${p.technologies.slice(0, 5).map(t =>
+                            ${displayTechs.slice(0, 5).map(t =>
                 `<span class="tech-tag" style="padding: 2px 8px; font-size: 0.7rem;">${t}</span>`
             ).join('')}
-                            ${p.technologies.length > 5 ? `<span class="tech-tag" style="padding: 2px 6px; font-size: 0.7rem;">+${p.technologies.length - 5}</span>` : ''}
+                            ${displayTechs.length > 5 ? `<span class="tech-tag" style="padding: 2px 6px; font-size: 0.7rem;">+${displayTechs.length - 5}</span>` : ''}
                         </div>
                     ` : ''}
                 </div>
@@ -242,6 +261,10 @@ async function cargarProyectos() {
 async function crearProyecto(evento) {
     evento.preventDefault();
 
+    // Prepare Technologies (Platform + Tags)
+    const platform = document.getElementById('platform').value;
+    const finalTechs = [platform, ...appState.techs.create];
+
     const nuevoProyecto = {
         title: document.getElementById('title').value,
         category: document.getElementById('category').value,
@@ -249,7 +272,7 @@ async function crearProyecto(evento) {
         videoUrl: document.getElementById('videoUrl').value,
         equipoNumero: parseInt(document.getElementById('teamNo').value) || 0,
         members: getMembersFromInput('membersList'),
-        technologies: appState.techs.create,
+        technologies: finalTechs,
         stats: { puntuacionFactibilidad: 0, totalEvaluaciones: 0 },
         status: "activo"
     };
@@ -366,8 +389,17 @@ function abrirEdicion(proyecto) {
         addMemberInput('editMembersList');
     }
 
-    // Poblar Tecnologías
-    appState.techs.edit = [...(proyecto.technologies || [])];
+    // Poblar Tecnologías y Plataforma
+    let techsToEdit = [...(proyecto.technologies || [])];
+    let platform = 'Web'; // Default
+
+    if (techsToEdit.length > 0 && PREDEFINED_PLATFORMS.includes(techsToEdit[0])) {
+        platform = techsToEdit[0];
+        techsToEdit.shift(); // Remove platform from tags
+    }
+
+    document.getElementById('editPlatform').value = platform;
+    appState.techs.edit = techsToEdit;
     renderTechTags('editTechTagsContainer', 'edit');
 
     // Configurar el botón de guardar
@@ -381,6 +413,10 @@ function abrirEdicion(proyecto) {
 // 5. FUNCIÓN: Guardar Edición (PUT)
 // ---------------------------------------------------------
 async function guardarEdicion(id, proyectoOriginal) {
+    // Prepare Technologies (Platform + Tags)
+    const platform = document.getElementById('editPlatform').value;
+    const finalTechs = [platform, ...appState.techs.edit];
+
     const proyectoActualizado = {
         id: id,
         title: document.getElementById('editTitle').value,
@@ -389,7 +425,7 @@ async function guardarEdicion(id, proyectoOriginal) {
         videoUrl: document.getElementById('editVideoUrl').value,
         equipoNumero: parseInt(document.getElementById('editTeamNo').value) || 0,
         members: getMembersFromInput('editMembersList'),
-        technologies: appState.techs.edit,
+        technologies: finalTechs,
         stats: proyectoOriginal.stats || { puntuacionFactibilidad: 0, totalEvaluaciones: 0 },
         status: proyectoOriginal.status || 'desactivado'
     };
