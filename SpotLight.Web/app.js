@@ -203,7 +203,7 @@ async function crearProyecto(evento) {
         category: document.getElementById('category').value,
         description: document.getElementById('desc').value,
         videoUrl: document.getElementById('videoUrl').value,
-        equipoNumero: parseInt(document.getElementById('teamNo').value),
+        equipoNumero: parseInt(document.getElementById('teamNo').value) || 0,
         members: [],
         stats: { puntuacionFactibilidad: 0, totalEvaluaciones: 0 },
         status: "activo"
@@ -224,6 +224,7 @@ async function crearProyecto(evento) {
             cargarProyectos();
         } else {
             const errorTexto = await respuesta.text();
+            console.error("Error del servidor:", errorTexto); // Log detailed error
             showToast('Error al guardar: ' + errorTexto, 'error');
         }
 
@@ -287,7 +288,7 @@ async function guardarEdicion(id, proyectoOriginal) {
         category: document.getElementById('editCategory').value,
         description: document.getElementById('editDesc').value,
         videoUrl: document.getElementById('editVideoUrl').value,
-        equipoNumero: parseInt(document.getElementById('editTeamNo').value),
+        equipoNumero: parseInt(document.getElementById('editTeamNo').value) || 0,
         members: proyectoOriginal.members || [],
         stats: proyectoOriginal.stats || { puntuacionFactibilidad: 0, totalEvaluaciones: 0 },
         status: proyectoOriginal.status || 'desactivado'
@@ -306,6 +307,7 @@ async function guardarEdicion(id, proyectoOriginal) {
             cargarProyectos();
         } else {
             const errorTexto = await respuesta.text();
+            console.error("Error del servidor (PUT):", errorTexto); // Log detailed error
             showToast('Error al actualizar: ' + errorTexto, 'error');
         }
 
