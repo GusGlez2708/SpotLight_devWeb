@@ -33,8 +33,10 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        // Esto permite que 'title' en JS sea 'Title' en C#
+        
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
 // Configuración de documentación (Swagger/OpenAPI)

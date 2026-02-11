@@ -284,6 +284,7 @@ function abrirEdicion(proyecto) {
 // ---------------------------------------------------------
 async function guardarEdicion(id, proyectoOriginal) {
     const proyectoActualizado = {
+        id: id,
         title: document.getElementById('editTitle').value,
         category: document.getElementById('editCategory').value,
         description: document.getElementById('editDesc').value,
