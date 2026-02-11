@@ -37,10 +37,18 @@ namespace SpotLight.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Project newProject)
         {
-            newProject.Status = "activo";
-            await _projectsService.CreateAsync(newProject);
+            try
+            {
+                newProject.Status = "activo";
+                await _projectsService.CreateAsync(newProject);
 
-            return CreatedAtAction(nameof(Get), new { id = newProject.Id }, newProject);
+                return CreatedAtAction(nameof(Get), new { id = newProject.Id }, newProject);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Error] Post: {ex}");
+                return StatusCode(500, $"Error interno al crear proyecto: {ex.Message} -> {ex.InnerException?.Message}");
+            }
         }
 
         [HttpPost("recalculate-stats")]
@@ -82,17 +90,30 @@ namespace SpotLight.API.Controllers
         [HttpPut("{id:length(24)}")]
         public async Task<IActionResult> Update(string id, Project updatedProject)
         {
-            var project = await _projectsService.GetAsync(id);
-
-            if (project is null)
+            try
             {
-                return NotFound();
+                var project = await _projectsService.GetAsync(id);
+
+                if (project is null)
+                {
+                    return NotFound();
+                }
+
+                updatedProject.Id = project.Id; // Ensure ID consistency
+                
+                // Keep existing stats/members if not provided (optional safety check)
+                if (updatedProject.Stats == null) updatedProject.Stats = project.Stats;
+                if (updatedProject.Members == null) updatedProject.Members = project.Members;
+
+                await _projectsService.UpdateAsync(id, updatedProject);
+
+                return NoContent();
             }
-
-            updatedProject.Id = project.Id;
-            await _projectsService.UpdateAsync(id, updatedProject);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Error] Update: {ex}");
+                return StatusCode(500, $"Error interno al actualizar proyecto: {ex.Message} -> {ex.InnerException?.Message}");
+            }
         }
 
         [HttpPatch("{id:length(24)}/status")]
