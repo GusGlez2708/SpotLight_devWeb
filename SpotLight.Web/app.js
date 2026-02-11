@@ -49,7 +49,7 @@ async function recalcularEstadisticas() {
         btn.innerHTML = '<i class="fa-solid fa-spin fa-spinner"></i> Sincronizando...';
         btn.disabled = true;
 
-        const response = await fetch(`${API_URL}/recalculate-stats`, {
+        const response = await fetch(`${API_URL}/projects/recalculate-stats`, {
             method: 'POST'
         });
 
@@ -85,7 +85,7 @@ async function cargarProyectos() {
 
     try {
         console.log("Conectando a:", API_URL);
-        const respuesta = await fetch(API_URL);
+        const respuesta = await fetch(`${API_URL}/projects`);
 
         if (!respuesta.ok) {
             throw new Error(`Error del servidor: ${respuesta.status}`);
@@ -212,7 +212,7 @@ async function crearProyecto(evento) {
     console.log("Enviando:", nuevoProyecto);
 
     try {
-        const respuesta = await fetch(API_URL, {
+        const respuesta = await fetch(`${API_URL}/projects`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(nuevoProyecto)
@@ -240,7 +240,7 @@ async function toggleStatus(id, statusActual) {
     const nuevoStatus = statusActual === 'activo' ? 'desactivado' : 'activo';
 
     try {
-        const respuesta = await fetch(`${API_URL}/${id}/status`, {
+        const respuesta = await fetch(`${API_URL}/projects/${id}/status`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: nuevoStatus })
@@ -294,7 +294,7 @@ async function guardarEdicion(id, proyectoOriginal) {
     };
 
     try {
-        const respuesta = await fetch(`${API_URL}/${id}`, {
+        const respuesta = await fetch(`${API_URL}/projects/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(proyectoActualizado)
@@ -332,7 +332,7 @@ function confirmarEliminar(id, nombre) {
 // ---------------------------------------------------------
 async function eliminarProyecto(id) {
     try {
-        const respuesta = await fetch(`${API_URL}/${id}`, {
+        const respuesta = await fetch(`${API_URL}/projects/${id}`, {
             method: 'DELETE'
         });
 

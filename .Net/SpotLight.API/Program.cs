@@ -30,7 +30,12 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader());
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Esto permite que 'title' en JS sea 'Title' en C#
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    });
 
 // Configuración de documentación (Swagger/OpenAPI)
 builder.Services.AddEndpointsApiExplorer();
@@ -51,6 +56,9 @@ app.UseHttpsRedirection();
 
 // ¡IMPORTANTE! Usar CORS antes de la autorización
 app.UseCors("AllowAll");
+
+app.UseDefaultFiles(); 
+app.UseStaticFiles();  
 
 app.UseAuthorization();
 
