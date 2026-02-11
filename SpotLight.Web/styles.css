@@ -976,6 +976,9 @@ body::before {
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
     transform: scale(0.92) translateY(20px);
     transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
 }
 
 .modal-overlay.show .modal {
@@ -1009,7 +1012,28 @@ body::before {
 .modal-body p {
     color: var(--text-secondary);
     font-size: 0.9rem;
+    font-size: 0.9rem;
     margin-bottom: 1rem;
+}
+
+.modal-body {
+    overflow-y: auto;
+    padding-right: 5px;
+    /* Evitar que el scroll tape contenido */
+}
+
+/* Scrollbar para el modal */
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--border-subtle);
+    border-radius: 3px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
 }
 
 .modal-body .project-name-highlight {
