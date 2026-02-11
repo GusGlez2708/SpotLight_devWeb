@@ -212,6 +212,8 @@ async function crearProyecto(evento) {
     console.log("Enviando:", nuevoProyecto);
 
     try {
+        limpiarErrores(); // Limpiar errores previos
+
         const respuesta = await fetch(`${API_URL}/projects`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -222,6 +224,17 @@ async function crearProyecto(evento) {
             showToast('¡Proyecto creado exitosamente!', 'success');
             document.getElementById('projectForm').reset();
             cargarProyectos();
+        } else if (respuesta.status === 409) {
+            const errorData = await respuesta.json();
+            const mensaje = errorData.message || 'Error de validación';
+
+            if (mensaje.includes('número de equipo')) {
+                mostrarErrorCampo('teamNo', mensaje);
+            } else if (mensaje.includes('nombre')) {
+                mostrarErrorCampo('title', mensaje);
+            } else {
+                showToast(mensaje, 'error');
+            }
         } else {
             const errorTexto = await respuesta.text();
             console.error("Error del servidor:", errorTexto); // Log detailed error
@@ -296,6 +309,8 @@ async function guardarEdicion(id, proyectoOriginal) {
     };
 
     try {
+        limpiarErrores(); // Limpiar errores previos
+
         const respuesta = await fetch(`${API_URL}/projects/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -306,6 +321,17 @@ async function guardarEdicion(id, proyectoOriginal) {
             showToast('Proyecto actualizado correctamente', 'success');
             cerrarModal('editModal');
             cargarProyectos();
+        } else if (respuesta.status === 409) {
+            const errorData = await respuesta.json();
+            const mensaje = errorData.message || 'Error de validación';
+
+            if (mensaje.includes('número de equipo')) {
+                mostrarErrorCampo('editTeamNo', mensaje);
+            } else if (mensaje.includes('nombre')) {
+                mostrarErrorCampo('editTitle', mensaje);
+            } else {
+                showToast(mensaje, 'error');
+            }
         } else {
             const errorTexto = await respuesta.text();
             console.error("Error del servidor (PUT):", errorTexto); // Log detailed error
@@ -352,6 +378,35 @@ async function eliminarProyecto(id) {
         console.error(error);
         showToast('Error de red al eliminar.', 'error');
     }
+}
+
+// ---------------------------------------------------------
+// Cargar lista automáticamente al abrir la página
+// ---------------------------------------------------------
+// ---------------------------------------------------------
+// 8. FUNCIONES DE VALIDACIÓN VISUAL
+// ---------------------------------------------------------
+function mostrarErrorCampo(idCampo, mensaje) {
+    const input = document.getElementById(idCampo);
+    if (!input) return;
+
+    input.classList.add('input-error');
+
+    // Crear mensaje de error
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.innerText = mensaje;
+
+    // Insertar después del input
+    input.parentNode.insertBefore(errorDiv, input.nextSibling);
+}
+
+function limpiarErrores() {
+    // Remover clases de error
+    document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+
+    // Remover mensajes de error
+    document.querySelectorAll('.error-message').forEach(el => el.remove());
 }
 
 // ---------------------------------------------------------

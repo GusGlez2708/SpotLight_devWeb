@@ -34,5 +34,11 @@ namespace SpotLight.API.Services
 
         public async Task RemoveAsync(string id) =>
             await _projectsCollection.DeleteOneAsync(x => x.Id == id);
+
+        public async Task<Project?> GetByTeamNumberAsync(int teamNumber) =>
+            await _projectsCollection.Find(paragraph => paragraph.EquipoNumero == teamNumber).FirstOrDefaultAsync();
+
+        public async Task<Project?> GetByTitleAsync(string title) =>
+            await _projectsCollection.Find(paragraph => paragraph.Title.ToLower() == title.ToLower()).FirstOrDefaultAsync();
     }
 }

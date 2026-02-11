@@ -39,6 +39,20 @@ namespace SpotLight.API.Controllers
         {
             try
             {
+                // Validation: Unique Team Number
+                var existingTeam = await _projectsService.GetByTeamNumberAsync(newProject.EquipoNumero);
+                if (existingTeam != null)
+                {
+                    return Conflict(new { message = $"El número de equipo {newProject.EquipoNumero} ya está registrado." });
+                }
+
+                // Validation: Unique Title
+                var existingTitle = await _projectsService.GetByTitleAsync(newProject.Title);
+                if (existingTitle != null)
+                {
+                    return Conflict(new { message = $"El nombre del proyecto '{newProject.Title}' ya existe." });
+                }
+
                 newProject.Status = "activo";
                 // Ensure CreatedAt is a string for MongoDB validation schema
                 if (string.IsNullOrEmpty(newProject.CreatedAt))
@@ -103,6 +117,20 @@ namespace SpotLight.API.Controllers
                 if (project is null)
                 {
                     return NotFound();
+                }
+
+                // Validation: Unique Team Number (excluding current project)
+                var existingTeam = await _projectsService.GetByTeamNumberAsync(updatedProject.EquipoNumero);
+                if (existingTeam != null && existingTeam.Id != id)
+                {
+                    return Conflict(new { message = $"El número de equipo {updatedProject.EquipoNumero} ya está registrado en otro proyecto." });
+                }
+
+                // Validation: Unique Title (excluding current project)
+                var existingTitle = await _projectsService.GetByTitleAsync(updatedProject.Title);
+                if (existingTitle != null && existingTitle.Id != id)
+                {
+                    return Conflict(new { message = $"El nombre del proyecto '{updatedProject.Title}' ya existe." });
                 }
 
                 updatedProject.Id = project.Id; // Ensure ID consistency

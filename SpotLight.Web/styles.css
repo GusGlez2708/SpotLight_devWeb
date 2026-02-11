@@ -797,6 +797,60 @@ body::before {
     transition: var(--transition);
 }
 
+
+/* --- Form Validation Styles --- */
+.input-error {
+    border-color: var(--danger) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+    animation: shake 0.4s ease-in-out;
+}
+
+.error-message {
+    color: var(--danger);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.error-message::before {
+    content: '\f06a';
+    /* FontAwesome exclamation-circle */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-4px);
+    }
+
+    75% {
+        transform: translateX(4px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-3px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .modal-overlay.show {
     opacity: 1;
     visibility: visible;
