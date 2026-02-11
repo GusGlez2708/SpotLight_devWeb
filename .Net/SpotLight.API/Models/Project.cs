@@ -35,7 +35,7 @@ namespace SpotLight.API.Models
         public string Status { get; set; } = "activo";
         
         [BsonElement("createdAt")]
-        public object? CreatedAt { get; set; }
+        public string? CreatedAt { get; set; }
     }
 
     [BsonIgnoreExtraElements]

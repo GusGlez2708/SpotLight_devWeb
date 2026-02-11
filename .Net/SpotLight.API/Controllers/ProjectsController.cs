@@ -40,6 +40,12 @@ namespace SpotLight.API.Controllers
             try
             {
                 newProject.Status = "activo";
+                // Ensure CreatedAt is a string for MongoDB validation schema
+                if (string.IsNullOrEmpty(newProject.CreatedAt))
+                {
+                    newProject.CreatedAt = DateTime.UtcNow.ToString("o"); 
+                }
+
                 await _projectsService.CreateAsync(newProject);
 
                 return CreatedAtAction(nameof(Get), new { id = newProject.Id }, newProject);
@@ -101,9 +107,10 @@ namespace SpotLight.API.Controllers
 
                 updatedProject.Id = project.Id; // Ensure ID consistency
                 
-                // Keep existing stats/members if not provided (optional safety check)
+                // Keep existing stats/members/createdAt if not provided
                 if (updatedProject.Stats == null) updatedProject.Stats = project.Stats;
                 if (updatedProject.Members == null) updatedProject.Members = project.Members;
+                if (string.IsNullOrEmpty(updatedProject.CreatedAt)) updatedProject.CreatedAt = project.CreatedAt;
 
                 await _projectsService.UpdateAsync(id, updatedProject);
 
