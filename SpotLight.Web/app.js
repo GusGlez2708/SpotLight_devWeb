@@ -209,10 +209,29 @@ async function crearProyecto(evento) {
         status: "activo"
     };
 
+    // Validación manual de campos requeridos
+    limpiarErrores();
+    let esValido = true;
+
+    if (!nuevoProyecto.title.trim()) {
+        mostrarErrorCampo('title', 'El título es obligatorio.');
+        esValido = false;
+    }
+    if (!nuevoProyecto.videoUrl.trim()) {
+        mostrarErrorCampo('videoUrl', 'La URL del video es obligatoria.');
+        esValido = false;
+    }
+    if (nuevoProyecto.equipoNumero <= 0) {
+        mostrarErrorCampo('teamNo', 'El número de equipo debe ser mayor a 0.');
+        esValido = false;
+    }
+
+    if (!esValido) return;
+
     console.log("Enviando:", nuevoProyecto);
 
     try {
-        limpiarErrores(); // Limpiar errores previos
+        // limpiarErrores(); // Ya se limpió arriba
 
         const respuesta = await fetch(`${API_URL}/projects`, {
             method: 'POST',
@@ -307,9 +326,27 @@ async function guardarEdicion(id, proyectoOriginal) {
         stats: proyectoOriginal.stats || { puntuacionFactibilidad: 0, totalEvaluaciones: 0 },
         status: proyectoOriginal.status || 'desactivado'
     };
+    // Validación manual de campos requeridos
+    limpiarErrores();
+    let esValido = true;
+
+    if (!proyectoActualizado.title.trim()) {
+        mostrarErrorCampo('editTitle', 'El título es obligatorio.');
+        esValido = false;
+    }
+    if (!proyectoActualizado.videoUrl.trim()) {
+        mostrarErrorCampo('editVideoUrl', 'La URL del video es obligatoria.');
+        esValido = false;
+    }
+    if (proyectoActualizado.equipoNumero <= 0) {
+        mostrarErrorCampo('editTeamNo', 'El número de equipo debe ser mayor a 0.');
+        esValido = false;
+    }
+
+    if (!esValido) return;
 
     try {
-        limpiarErrores(); // Limpiar errores previos
+        // limpiarErrores(); // Ya se limpió arriba
 
         const respuesta = await fetch(`${API_URL}/projects/${id}`, {
             method: 'PUT',

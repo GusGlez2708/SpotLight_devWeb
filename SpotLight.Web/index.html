@@ -37,7 +37,7 @@
                 <i class="fa-solid fa-rocket"></i>
                 <h2 class="panel-title">Nuevo Proyecto</h2>
             </div>
-            <form id="projectForm" onsubmit="crearProyecto(event)">
+            <form id="projectForm" onsubmit="crearProyecto(event)" novalidate>
                 <div class="form-group">
                     <label class="form-label" for="title">Nombre del Proyecto</label>
                     <input type="text" id="title" class="form-input" placeholder="Ej: Eco-Dron Smart" required>
@@ -124,7 +124,7 @@
                 <h3 class="modal-title">Editar Proyecto</h3>
             </div>
             <div class="modal-body">
-                <form id="editForm">
+                <form id="editForm" novalidate>
                     <div class="form-group">
                         <label class="form-label">Nombre</label>
                         <input type="text" id="editTitle" class="form-input" required>
