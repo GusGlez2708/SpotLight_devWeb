@@ -4,6 +4,31 @@
 const API_URL = "/api";
 
 // ---------------------------------------------------------
+// CONSTANTES & ESTADO
+// ---------------------------------------------------------
+const PREDEFINED_TECHS = [
+    "React", "Angular", "Vue.js", "Svelte", "Node.js", ".NET Core",
+    "Python", "Django", "Flask", "Java", "Spring Boot", "Kotlin", "Swift",
+    "Flutter", "Dart", "SQL Server", "PostgreSQL", "MongoDB", "Redis",
+    "Docker", "Kubernetes", "AWS", "Azure", "Google Cloud", "TensorFlow",
+    "PyTorch", "OpenCV", "Arduino", "Raspberry Pi", "IoT"
+];
+
+const appState = {
+    techs: { create: [], edit: [] }
+};
+
+// Inicializar Datalists
+document.addEventListener('DOMContentLoaded', () => {
+    const options = PREDEFINED_TECHS.map(t => `<option value="${t}">`).join('');
+    document.getElementById('techOptions').innerHTML = options;
+    document.getElementById('editTechOptions').innerHTML = options;
+
+    // Inicializar inputs de miembros (al menos uno vacío)
+    addMemberInput('membersList');
+});
+
+// ---------------------------------------------------------
 // UTILIDADES — Toast Notifications
 // ---------------------------------------------------------
 function showToast(message, type = 'success') {
@@ -144,6 +169,25 @@ async function cargarProyectos() {
                         <div class="score-label">${p.stats ? p.stats.totalEvaluaciones || 0 : 0} Eval.</div>
                     </div>
                 </div>
+                
+                <!-- Members & Techs Display -->
+                <div class="card-details" style="margin-bottom: 12px;">
+                    ${(p.members && p.members.length > 0) ? `
+                        <div class="members-display" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">
+                            <i class="fa-solid fa-user-group"></i> ${p.members.join(', ')}
+                        </div>
+                    ` : ''}
+                    
+                    ${(p.technologies && p.technologies.length > 0) ? `
+                        <div class="tech-tags-list" style="gap: 4px;">
+                            ${p.technologies.slice(0, 5).map(t =>
+                `<span class="tech-tag" style="padding: 2px 8px; font-size: 0.7rem;">${t}</span>`
+            ).join('')}
+                            ${p.technologies.length > 5 ? `<span class="tech-tag" style="padding: 2px 6px; font-size: 0.7rem;">+${p.technologies.length - 5}</span>` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+
                 <div class="card-footer">
                     <span class="card-meta">
                         <i class="fa-solid fa-users"></i> Equipo #${p.equipoNumero || p.equipo_numero || 0}
@@ -204,7 +248,8 @@ async function crearProyecto(evento) {
         description: document.getElementById('desc').value,
         videoUrl: document.getElementById('videoUrl').value,
         equipoNumero: parseInt(document.getElementById('teamNo').value) || 0,
-        members: [],
+        members: getMembersFromInput('membersList'),
+        technologies: appState.techs.create,
         stats: { puntuacionFactibilidad: 0, totalEvaluaciones: 0 },
         status: "activo"
     };
@@ -242,6 +287,13 @@ async function crearProyecto(evento) {
         if (respuesta.ok) {
             showToast('¡Proyecto creado exitosamente!', 'success');
             document.getElementById('projectForm').reset();
+
+            // Reset dynamic fields
+            document.getElementById('membersList').innerHTML = '';
+            addMemberInput('membersList');
+            appState.techs.create = [];
+            renderTechTags('techTagsContainer', 'create');
+
             cargarProyectos();
         } else if (respuesta.status === 409) {
             const errorData = await respuesta.json();
@@ -302,7 +354,21 @@ function abrirEdicion(proyecto) {
     document.getElementById('editCategory').value = proyecto.category || 'Tecnología';
     document.getElementById('editDesc').value = proyecto.description || '';
     document.getElementById('editVideoUrl').value = proyecto.videoUrl || '';
+    document.getElementById('editVideoUrl').value = proyecto.videoUrl || '';
     document.getElementById('editTeamNo').value = proyecto.equipoNumero || proyecto.equipo_numero || 1;
+
+    // Poblar Miembros
+    const membersList = document.getElementById('editMembersList');
+    membersList.innerHTML = '';
+    if (proyecto.members && proyecto.members.length > 0) {
+        proyecto.members.forEach(m => addMemberInput('editMembersList', m));
+    } else {
+        addMemberInput('editMembersList');
+    }
+
+    // Poblar Tecnologías
+    appState.techs.edit = [...(proyecto.technologies || [])];
+    renderTechTags('editTechTagsContainer', 'edit');
 
     // Configurar el botón de guardar
     const btnGuardar = document.getElementById('btnConfirmEdit');
@@ -322,7 +388,8 @@ async function guardarEdicion(id, proyectoOriginal) {
         description: document.getElementById('editDesc').value,
         videoUrl: document.getElementById('editVideoUrl').value,
         equipoNumero: parseInt(document.getElementById('editTeamNo').value) || 0,
-        members: proyectoOriginal.members || [],
+        members: getMembersFromInput('editMembersList'),
+        technologies: appState.techs.edit,
         stats: proyectoOriginal.stats || { puntuacionFactibilidad: 0, totalEvaluaciones: 0 },
         status: proyectoOriginal.status || 'desactivado'
     };
@@ -445,6 +512,101 @@ function limpiarErrores() {
     // Remover mensajes de error
     document.querySelectorAll('.error-message').forEach(el => el.remove());
 }
+
+// ---------------------------------------------------------
+// 9. LOGICA DINAMICA (MIEMBROS & TECNOLOGIAS)
+// ---------------------------------------------------------
+
+// --- Miembros ---
+function addMemberInput(containerId, value = '') {
+    const container = document.getElementById(containerId);
+    if (container.children.length >= 6) {
+        showToast('Máximo 6 integrantes permitidos.', 'error');
+        return;
+    }
+
+    const div = document.createElement('div');
+    div.className = 'dynamic-input-group';
+    div.innerHTML = `
+        <input type="text" class="form-input member-input" placeholder="Nombre del integrante" value="${value}" required>
+        <button type="button" class="btn-remove-item" onclick="removeMemberInput(this)">
+            <i class="fa-solid fa-trash"></i>
+        </button>
+    `;
+    container.appendChild(div);
+}
+
+function removeMemberInput(btn) {
+    const container = btn.closest('.dynamic-list-container');
+    if (container.children.length > 1) {
+        btn.parentElement.remove();
+    } else {
+        // Si es el último, solo limpiar el value
+        btn.parentElement.querySelector('input').value = '';
+    }
+}
+
+function getMembersFromInput(containerId) {
+    const inputs = document.querySelectorAll(`#${containerId} .member-input`);
+    const members = [];
+    inputs.forEach(input => {
+        if (input.value.trim()) members.push(input.value.trim());
+    });
+    return members;
+}
+
+// --- Tecnologías ---
+function addTechTag(inputId, containerId) {
+    const input = document.getElementById(inputId);
+    const value = input.value.trim();
+    const context = containerId === 'techTagsContainer' ? 'create' : 'edit';
+
+    if (!value) return;
+
+    if (appState.techs[context].includes(value)) {
+        showToast('Esa tecnología ya está agregada.', 'error');
+        input.value = '';
+        return;
+    }
+
+    appState.techs[context].push(value);
+    input.value = '';
+    renderTechTags(containerId, context);
+}
+
+function renderTechTags(containerId, context) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    appState.techs[context].forEach((tech, index) => {
+        const tag = document.createElement('span');
+        tag.className = 'tech-tag';
+        tag.innerHTML = `
+            ${tech} 
+            <i class="fa-solid fa-xmark" onclick="removeTechTag(${index}, '${containerId}', '${context}')"></i>
+        `;
+        container.appendChild(tag);
+    });
+}
+
+function removeTechTag(index, containerId, context) {
+    appState.techs[context].splice(index, 1);
+    renderTechTags(containerId, context);
+}
+
+// Enter key support for inputs
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        if (document.activeElement.id === 'techInput') {
+            e.preventDefault();
+            addTechTag('techInput', 'techTagsContainer');
+        }
+        if (document.activeElement.id === 'editTechInput') {
+            e.preventDefault();
+            addTechTag('editTechInput', 'editTechTagsContainer');
+        }
+    }
+});
 
 // ---------------------------------------------------------
 // Cargar lista automáticamente al abrir la página

@@ -547,6 +547,7 @@ body::before {
     line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -854,6 +855,115 @@ body::before {
 .modal-overlay.show {
     opacity: 1;
     visibility: visible;
+}
+
+/* --- Dynamic Lists (Members & Tech) --- */
+.dynamic-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.dynamic-input-group {
+    display: flex;
+    gap: 8px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.btn-remove-item {
+    padding: 0 12px;
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-remove-item:hover {
+    background: var(--danger);
+    color: #fff;
+}
+
+.btn-add-dashed {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-add-dashed:hover {
+    background: rgba(0, 191, 166, 0.05);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* --- Tech Tags --- */
+.tech-container {
+    margin-top: 10px;
+}
+
+.tech-input-wrapper {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.btn-add-tech {
+    background: var(--primary-glow);
+    color: var(--primary);
+    border: 1px solid var(--border-subtle);
+    padding: 0 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-add-tech:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+.tech-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tech-tag {
+    background: rgba(0, 191, 166, 0.12);
+    color: var(--primary-light);
+    border: 1px solid rgba(0, 191, 166, 0.15);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.tech-tag i {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: 0.2s;
+}
+
+.tech-tag i:hover {
+    opacity: 1;
+    color: var(--danger);
 }
 
 .modal {

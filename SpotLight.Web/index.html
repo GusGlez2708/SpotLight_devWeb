@@ -64,6 +64,30 @@
                     <label class="form-label" for="teamNo">Número de Equipo</label>
                     <input type="number" id="teamNo" class="form-input" value="1" min="1">
                 </div>
+
+                <!-- Members -->
+                <div class="form-group">
+                    <label class="form-label">Integrantes (Máx. 6)</label>
+                    <div id="membersList" class="dynamic-list-container"></div>
+                    <button type="button" class="btn-add-dashed" onclick="addMemberInput('membersList')">
+                        <i class="fa-solid fa-plus"></i> Añadir Integrante
+                    </button>
+                </div>
+
+                <!-- Technologies -->
+                <div class="form-group">
+                    <label class="form-label">Tecnologías</label>
+                    <div class="tech-input-wrapper">
+                        <input type="text" id="techInput" class="form-input" list="techOptions"
+                            placeholder="Ej: React, .NET...">
+                        <datalist id="techOptions"></datalist>
+                        <button type="button" class="btn-add-tech"
+                            onclick="addTechTag('techInput', 'techTagsContainer')">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                    <div id="techTagsContainer" class="tech-tags-list"></div>
+                </div>
                 <button type="submit" class="btn-submit">
                     <i class="fa-solid fa-paper-plane"></i> Publicar Proyecto
                 </button>
@@ -149,6 +173,30 @@
                     <div class="form-group">
                         <label class="form-label">Número de Equipo</label>
                         <input type="number" id="editTeamNo" class="form-input" min="1">
+                    </div>
+
+                    <!-- Members (Edit) -->
+                    <div class="form-group">
+                        <label class="form-label">Integrantes (Máx. 6)</label>
+                        <div id="editMembersList" class="dynamic-list-container"></div>
+                        <button type="button" class="btn-add-dashed" onclick="addMemberInput('editMembersList')">
+                            <i class="fa-solid fa-plus"></i> Añadir Integrante
+                        </button>
+                    </div>
+
+                    <!-- Technologies (Edit) -->
+                    <div class="form-group">
+                        <label class="form-label">Tecnologías</label>
+                        <div class="tech-input-wrapper">
+                            <input type="text" id="editTechInput" class="form-input" list="editTechOptions"
+                                placeholder="Ej: React, .NET...">
+                            <datalist id="editTechOptions"></datalist>
+                            <button type="button" class="btn-add-tech"
+                                onclick="addTechTag('editTechInput', 'editTechTagsContainer')">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <div id="editTechTagsContainer" class="tech-tags-list"></div>
                     </div>
                 </form>
             </div>

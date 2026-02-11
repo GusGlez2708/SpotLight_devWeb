@@ -28,6 +28,9 @@ namespace SpotLight.API.Models
         [BsonElement("members")]
         public List<string> Members { get; set; } = new List<string>();
 
+        [BsonElement("technologies")]
+        public List<string> Technologies { get; set; } = new List<string>();
+
         [BsonElement("stats")]
         public ProjectStats Stats { get; set; } = new ProjectStats();
 
