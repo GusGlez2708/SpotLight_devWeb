@@ -34,11 +34,10 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+  
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-    
-        options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
-
 // Configuración de documentación (Swagger/OpenAPI)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(); 

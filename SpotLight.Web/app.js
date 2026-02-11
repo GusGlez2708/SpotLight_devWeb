@@ -164,7 +164,7 @@ async function cargarProyectos() {
                         <i class="fa-solid fa-pen"></i> Editar
                     </button>
                     <button class="btn-action btn-delete"
-                            onclick="confirmarEliminar('${p.id}', '${p.title.replace(/'/g, "\\'")}')">
+                            onclick="confirmarEliminar('${p.id}', '${(p.title || 'Sin título').replace(/'/g, "\\'")}')">
                         <i class="fa-solid fa-trash"></i> Eliminar
                     </button>
                 </div>
