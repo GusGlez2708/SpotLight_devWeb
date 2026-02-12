@@ -25,6 +25,9 @@ namespace SpotLight.API.Models
         [BsonElement("videoUrl")]
         public string VideoUrl { get; set; } = null!;
 
+        [BsonElement("imageUrl")]
+        public string? ImageUrl { get; set; }
+
         [BsonElement("members")]
         public List<string> Members { get; set; } = new List<string>();
 

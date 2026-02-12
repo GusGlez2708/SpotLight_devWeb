@@ -270,6 +270,7 @@ async function crearProyecto(evento) {
         category: document.getElementById('category').value,
         description: document.getElementById('desc').value,
         videoUrl: document.getElementById('videoUrl').value,
+        imageUrl: document.getElementById('imageUrl').value,
         equipoNumero: parseInt(document.getElementById('teamNo').value) || 0,
         members: getMembersFromInput('membersList'),
         technologies: finalTechs,
@@ -377,7 +378,7 @@ function abrirEdicion(proyecto) {
     document.getElementById('editCategory').value = proyecto.category || 'Tecnología';
     document.getElementById('editDesc').value = proyecto.description || '';
     document.getElementById('editVideoUrl').value = proyecto.videoUrl || '';
-    document.getElementById('editVideoUrl').value = proyecto.videoUrl || '';
+    document.getElementById('editImageUrl').value = proyecto.imageUrl || '';
     document.getElementById('editTeamNo').value = proyecto.equipoNumero || proyecto.equipo_numero || 1;
 
     // Poblar Miembros
@@ -423,6 +424,7 @@ async function guardarEdicion(id, proyectoOriginal) {
         category: document.getElementById('editCategory').value,
         description: document.getElementById('editDesc').value,
         videoUrl: document.getElementById('editVideoUrl').value,
+        imageUrl: document.getElementById('editImageUrl').value,
         equipoNumero: parseInt(document.getElementById('editTeamNo').value) || 0,
         members: getMembersFromInput('editMembersList'),
         technologies: finalTechs,
