@@ -290,6 +290,10 @@ async function crearProyecto(evento) {
         mostrarErrorCampo('videoUrl', 'La URL del video es obligatoria.');
         esValido = false;
     }
+    if (!nuevoProyecto.imageUrl.trim()) {
+        mostrarErrorCampo('imageUrl', 'La URL de la imagen es obligatoria.');
+        esValido = false;
+    }
     if (nuevoProyecto.equipoNumero <= 0) {
         mostrarErrorCampo('teamNo', 'El número de equipo debe ser mayor a 0.');
         esValido = false;
@@ -441,6 +445,10 @@ async function guardarEdicion(id, proyectoOriginal) {
     }
     if (!proyectoActualizado.videoUrl.trim()) {
         mostrarErrorCampo('editVideoUrl', 'La URL del video es obligatoria.');
+        esValido = false;
+    }
+    if (!proyectoActualizado.imageUrl.trim()) {
+        mostrarErrorCampo('editImageUrl', 'La URL de la imagen es obligatoria.');
         esValido = false;
     }
     if (proyectoActualizado.equipoNumero <= 0) {
