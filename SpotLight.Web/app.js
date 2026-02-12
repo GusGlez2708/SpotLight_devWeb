@@ -286,6 +286,14 @@ async function crearProyecto(evento) {
         mostrarErrorCampo('title', 'El título es obligatorio.');
         esValido = false;
     }
+    if (!nuevoProyecto.category.trim()) {
+        mostrarErrorCampo('category', 'La Categoría es obligatoria.');
+        esValido = false;
+    }
+    if (!nuevoProyecto.description.trim()) {
+        mostrarErrorCampo('desc', 'La Descripción es obligatoria.');
+        esValido = false;
+    }
     if (!nuevoProyecto.videoUrl.trim()) {
         mostrarErrorCampo('videoUrl', 'La URL del video es obligatoria.');
         esValido = false;
@@ -296,6 +304,14 @@ async function crearProyecto(evento) {
     }
     if (nuevoProyecto.equipoNumero <= 0) {
         mostrarErrorCampo('teamNo', 'El número de equipo debe ser mayor a 0.');
+        esValido = false;
+    }
+    if (nuevoProyecto.members.length === 0) {
+        mostrarErrorCampo('membersList', 'Los Integrantes son obligatorios.');
+        esValido = false;
+    }
+    if (nuevoProyecto.technologies.length <= 1) { // 1 because platform is always present
+        mostrarErrorCampo('techTagsContainer', 'Las Tecnologías son obligatorias.');
         esValido = false;
     }
 
@@ -443,6 +459,10 @@ async function guardarEdicion(id, proyectoOriginal) {
         mostrarErrorCampo('editTitle', 'El título es obligatorio.');
         esValido = false;
     }
+    if (!proyectoActualizado.description.trim()) {
+        mostrarErrorCampo('editDesc', 'La Descripción es obligatoria.');
+        esValido = false;
+    }
     if (!proyectoActualizado.videoUrl.trim()) {
         mostrarErrorCampo('editVideoUrl', 'La URL del video es obligatoria.');
         esValido = false;
@@ -453,6 +473,14 @@ async function guardarEdicion(id, proyectoOriginal) {
     }
     if (proyectoActualizado.equipoNumero <= 0) {
         mostrarErrorCampo('editTeamNo', 'El número de equipo debe ser mayor a 0.');
+        esValido = false;
+    }
+    if (proyectoActualizado.members.length === 0) {
+        mostrarErrorCampo('editMembersList', 'Los Integrantes son obligatorios.');
+        esValido = false;
+    }
+    if (proyectoActualizado.technologies.length <= 1) {
+        mostrarErrorCampo('editTechTagsContainer', 'Las Tecnologías son obligatorias.');
         esValido = false;
     }
 
