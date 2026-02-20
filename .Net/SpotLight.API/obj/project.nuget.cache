@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "oOQzhGETDr8=",
+  "dgSpecHash": "gCXc4rsjuvk=",
   "success": true,
-  "projectFilePath": "C:\\dev\\spotlight\\dev_web\\.net\\spotlight.api\\SpotLight.API.csproj",
+  "projectFilePath": "c:\\dev\\spotlight\\dev_web\\.Net\\SpotLight.API\\SpotLight.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Gustavo Gonzalez\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
     "C:\\Users\\Gustavo Gonzalez\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.11\\microsoft.aspnetcore.openapi.9.0.11.nupkg.sha512",
