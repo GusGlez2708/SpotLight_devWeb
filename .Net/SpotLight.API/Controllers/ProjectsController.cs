@@ -91,18 +91,18 @@ namespace SpotLight.API.Controllers
                 Console.WriteLine($"[Sync] Evaluaciones encontradas: {evaluations.Count}");
                 detailedLogs.Add($"Evaluaciones encontradas: {evaluations.Count}");
 
-                if (evaluations.Any())
-                {
-                    double avg = evaluations.Average(e => e.AiAnalysis.PuntuacionFactibilidad);
-                    Console.WriteLine($"[Sync] Nuevo promedio: {avg}");
-                    detailedLogs.Add($"Nuevo promedio: {avg}");
-                    
-                    p.Stats.PuntuacionFactibilidad = Math.Round(avg, 1);
-                    p.Stats.TotalEvaluaciones = evaluations.Count;
-                    
-                    await _projectsService.UpdateAsync(p.Id, p);
-                    updatedCount++;
-                }
+                double avg = evaluations.Any()
+                    ? evaluations.Average(e => e.AiAnalysis.PuntuacionFactibilidad)
+                    : 0;
+
+                Console.WriteLine($"[Sync] Nuevo promedio: {avg}, Total evals: {evaluations.Count}");
+                detailedLogs.Add($"Nuevo promedio: {avg}, Total evals: {evaluations.Count}");
+
+                p.Stats.PuntuacionFactibilidad = Math.Round(avg, 1);
+                p.Stats.TotalEvaluaciones = evaluations.Count;
+
+                await _projectsService.UpdateAsync(p.Id, p);
+                updatedCount++;
             }
             return Ok(new { message = $"Recalculadas las estadísticas de {updatedCount} proyectos", logs = detailedLogs });
         }
