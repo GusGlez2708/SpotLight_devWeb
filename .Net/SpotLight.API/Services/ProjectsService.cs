@@ -21,7 +21,10 @@ namespace SpotLight.API.Services
         }
 
         public async Task<List<Project>> GetAsync() =>
-                        await _projectsCollection.Find(_ => true).ToListAsync();
+            await _projectsCollection.Find(_ => true).ToListAsync();
+
+        public async Task<List<Project>> GetActiveAsync() =>
+            await _projectsCollection.Find(p => p.Status == "activo").ToListAsync();
 
 
         public async Task<Project?> GetAsync(string id) =>

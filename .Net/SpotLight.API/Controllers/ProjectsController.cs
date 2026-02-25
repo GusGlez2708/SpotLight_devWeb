@@ -21,6 +21,10 @@ namespace SpotLight.API.Controllers
         public async Task<List<Project>> Get() =>
             await _projectsService.GetAsync();
 
+        [HttpGet("active")]
+        public async Task<List<Project>> GetActive() =>
+            await _projectsService.GetActiveAsync();
+
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Project>> Get(string id)
         {
