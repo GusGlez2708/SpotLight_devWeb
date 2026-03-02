@@ -16,6 +16,10 @@ namespace SpotLight.API.Models
         [BsonElement("evaluatorId")]
         public string EvaluatorId { get; set; } = null!;
 
+        [BsonElement("supervisorId")]
+        [BsonIgnoreIfNull]
+        public string? SupervisorId { get; set; }
+
         [BsonElement("scores")]
         public ScoreBreakdown Scores { get; set; } = new ScoreBreakdown();
 

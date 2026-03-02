@@ -30,6 +30,10 @@ namespace SpotLight.API.Services
         public async Task<List<Evaluation>> GetByProjectIdAsync(string projectId) =>
             await _evaluationsCollection.Find(x => x.ProjectId == projectId).ToListAsync();
 
+        // Obtener la cantidad de evaluaciones hechas por un supervisor
+        public async Task<long> CountBySupervisorIdAsync(string supervisorId) =>
+            await _evaluationsCollection.CountDocumentsAsync(x => x.SupervisorId == supervisorId);
+
         public async Task CreateAsync(Evaluation newEvaluation) =>
             await _evaluationsCollection.InsertOneAsync(newEvaluation);
     }

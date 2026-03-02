@@ -28,6 +28,11 @@ namespace SpotLight.API.Controllers
         public async Task<List<Evaluation>> GetByProject(string projectId) =>
             await _evaluationsService.GetByProjectIdAsync(projectId);
 
+        // GET api/evaluations/supervisor/{supervisorId}/count — obtener recuento de evaluaciones por supervisor
+        [HttpGet("supervisor/{supervisorId:length(24)}/count")]
+        public async Task<ActionResult<long>> GetCountBySupervisor(string supervisorId) =>
+            await _evaluationsService.CountBySupervisorIdAsync(supervisorId);
+
         [HttpPost]
         public async Task<IActionResult> Post(Evaluation newEvaluation)
         {
