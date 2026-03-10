@@ -8,6 +8,7 @@ Projects:
   "description": "Dron que planta árboles...",
   "category": "Sustentabilidad",
   "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  "previewVideoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
   "members": [
     "Juan Escobar",
     "Enrique Peña"
@@ -45,6 +46,10 @@ Validacion:
       },
       videoUrl: {
         bsonType: 'string'
+      },
+      previewVideoUrl: {
+        bsonType: 'string',
+        description: 'URL del video corto de previsualización'
       },
       equipo_numero: {
         bsonType: 'number'

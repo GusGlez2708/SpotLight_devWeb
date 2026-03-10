@@ -165,6 +165,10 @@ async function cargarProyectos() {
             card.style.animationDelay = `${index * 0.08}s`;
 
             card.innerHTML = `
+                <div class="card-media" onmouseenter="playPreview(this)" onmouseleave="stopPreview(this)">
+                    <img src="${p.imageUrl || 'logo.png'}" alt="Project Image" class="card-image" loading="lazy" />
+                    ${p.previewVideoUrl ? `<video src="${p.previewVideoUrl}" class="card-video" muted loop playsinline></video>` : ''}
+                </div>
                 <div class="card-top">
                     <div class="card-info">
                         <div class="card-badges">
@@ -270,6 +274,7 @@ async function crearProyecto(evento) {
         category: document.getElementById('category').value,
         description: document.getElementById('desc').value,
         videoUrl: document.getElementById('videoUrl').value,
+        previewVideoUrl: document.getElementById('previewVideoUrl').value,
         imageUrl: document.getElementById('imageUrl').value,
         equipoNumero: parseInt(document.getElementById('teamNo').value) || 0,
         members: getMembersFromInput('membersList'),
@@ -296,6 +301,10 @@ async function crearProyecto(evento) {
     }
     if (!nuevoProyecto.videoUrl.trim()) {
         mostrarErrorCampo('videoUrl', 'La URL del video es obligatoria.');
+        esValido = false;
+    }
+    if (!nuevoProyecto.previewVideoUrl.trim()) {
+        mostrarErrorCampo('previewVideoUrl', 'La URL del video corto es obligatoria.');
         esValido = false;
     }
     if (!nuevoProyecto.imageUrl.trim()) {
@@ -398,6 +407,7 @@ function abrirEdicion(proyecto) {
     document.getElementById('editCategory').value = proyecto.category || 'Tecnología';
     document.getElementById('editDesc').value = proyecto.description || '';
     document.getElementById('editVideoUrl').value = proyecto.videoUrl || '';
+    document.getElementById('editPreviewVideoUrl').value = proyecto.previewVideoUrl || '';
     document.getElementById('editImageUrl').value = proyecto.imageUrl || '';
     document.getElementById('editTeamNo').value = proyecto.equipoNumero || proyecto.equipo_numero || 1;
 
@@ -444,6 +454,7 @@ async function guardarEdicion(id, proyectoOriginal) {
         category: document.getElementById('editCategory').value,
         description: document.getElementById('editDesc').value,
         videoUrl: document.getElementById('editVideoUrl').value,
+        previewVideoUrl: document.getElementById('editPreviewVideoUrl').value,
         imageUrl: document.getElementById('editImageUrl').value,
         equipoNumero: parseInt(document.getElementById('editTeamNo').value) || 0,
         members: getMembersFromInput('editMembersList'),
@@ -465,6 +476,10 @@ async function guardarEdicion(id, proyectoOriginal) {
     }
     if (!proyectoActualizado.videoUrl.trim()) {
         mostrarErrorCampo('editVideoUrl', 'La URL del video es obligatoria.');
+        esValido = false;
+    }
+    if (!proyectoActualizado.previewVideoUrl.trim()) {
+        mostrarErrorCampo('editPreviewVideoUrl', 'La URL del video corto es obligatoria.');
         esValido = false;
     }
     if (!proyectoActualizado.imageUrl.trim()) {
@@ -681,6 +696,26 @@ document.addEventListener('keydown', (e) => {
         }
     }
 });
+
+// ---------------------------------------------------------
+// 10. FUNCIONES DE VIDEO PREVIEW (HOVER)
+// ---------------------------------------------------------
+function playPreview(element) {
+    const video = element.querySelector('.card-video');
+    if (video) {
+        element.classList.add('playing');
+        video.play().catch(e => console.log("Video autoplay prevented:", e));
+    }
+}
+
+function stopPreview(element) {
+    const video = element.querySelector('.card-video');
+    if (video) {
+        element.classList.remove('playing');
+        video.pause();
+        video.currentTime = 0;
+    }
+}
 
 // ---------------------------------------------------------
 // Cargar lista automáticamente al abrir la página

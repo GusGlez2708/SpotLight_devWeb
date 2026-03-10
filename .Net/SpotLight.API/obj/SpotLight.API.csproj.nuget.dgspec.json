@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\dev\\spotlight\\dev_web\\.Net\\SpotLight.API\\SpotLight.API.csproj": {}
+    "C:\\dev\\spotlight\\dev_web\\.Net\\SpotLight.API\\SpotLight.API.csproj": {}
   },
   "projects": {
-    "c:\\dev\\spotlight\\dev_web\\.Net\\SpotLight.API\\SpotLight.API.csproj": {
+    "C:\\dev\\spotlight\\dev_web\\.Net\\SpotLight.API\\SpotLight.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\dev\\spotlight\\dev_web\\.Net\\SpotLight.API\\SpotLight.API.csproj",
+        "projectUniqueName": "C:\\dev\\spotlight\\dev_web\\.Net\\SpotLight.API\\SpotLight.API.csproj",
         "projectName": "SpotLight.API",
-        "projectPath": "c:\\dev\\spotlight\\dev_web\\.Net\\SpotLight.API\\SpotLight.API.csproj",
+        "projectPath": "C:\\dev\\spotlight\\dev_web\\.Net\\SpotLight.API\\SpotLight.API.csproj",
         "packagesPath": "C:\\Users\\Gustavo Gonzalez\\.nuget\\packages\\",
-        "outputPath": "c:\\dev\\spotlight\\dev_web\\.Net\\SpotLight.API\\obj\\",
+        "outputPath": "C:\\dev\\spotlight\\dev_web\\.Net\\SpotLight.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Gustavo Gonzalez\\AppData\\Roaming\\NuGet\\NuGet.Config"

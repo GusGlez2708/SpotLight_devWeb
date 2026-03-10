@@ -408,6 +408,44 @@ body::before {
     gap: 1.25rem;
 }
 
+/* --- Card Media (Image & Video) --- */
+.card-media {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    margin-bottom: 1rem;
+    background: var(--bg-deep);
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity var(--transition);
+}
+
+.card-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+}
+
+.card-media.playing .card-image {
+    opacity: 0;
+}
+
+.card-media.playing .card-video {
+    opacity: 1;
+}
+
 /* --- Project Card --- */
 .project-card {
     background: var(--glass-bg);
