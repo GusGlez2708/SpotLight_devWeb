@@ -165,9 +165,8 @@ async function cargarProyectos() {
             card.style.animationDelay = `${index * 0.08}s`;
 
             card.innerHTML = `
-                <div class="card-media" onmouseenter="playPreview(this)" onmouseleave="stopPreview(this)">
+                <div class="card-media">
                     <img src="${getDirectMediaUrl(p.imageUrl) || 'logo.png'}" alt="Project Image" class="card-image" loading="lazy" />
-                    ${p.previewVideoUrl ? `<video src="${getDirectMediaUrl(p.previewVideoUrl)}" class="card-video" muted loop playsinline></video>` : ''}
                 </div>
                 <div class="card-top">
                     <div class="card-info">
@@ -211,13 +210,19 @@ async function cargarProyectos() {
                     ` : ''}
                 </div>
 
-                <div class="card-footer">
+                <div class="card-footer" style="padding: 10px 15px;">
                     <span class="card-meta">
-                        <i class="fa-solid fa-users"></i> Equipo #${p.equipoNumero || p.equipo_numero || 0}
+                        <i class="fa-solid fa-users"></i> Eq #${p.equipoNumero || p.equipo_numero || 0}
                     </span>
-                    <a href="${p.videoUrl}" target="_blank" class="card-link">
-                        <i class="fa-solid fa-play"></i> Ver Video
-                    </a>
+                    <div style="display: flex; gap: 8px;">
+                        ${p.previewVideoUrl ? `
+                        <a href="${p.previewVideoUrl}" target="_blank" class="card-link" style="padding: 4px 8px; font-size: 0.8rem;">
+                            <i class="fa-solid fa-film"></i> Preview
+                        </a>` : ''}
+                        <a href="${p.videoUrl}" target="_blank" class="card-link" style="padding: 4px 8px; font-size: 0.8rem;">
+                            <i class="fa-solid fa-play"></i> Video
+                        </a>
+                    </div>
                 </div>
                 <div class="card-actions">
                     <button class="btn-action ${isActive ? 'btn-toggle-active' : 'btn-toggle-inactive'}"
@@ -710,25 +715,8 @@ function getDirectMediaUrl(url) {
     }
     return url;
 }
-
-function playPreview(element) {
-    const video = element.querySelector('.card-video');
-    if (video) {
-        element.classList.add('playing');
-        video.play().catch(e => console.log("Video autoplay prevented:", e));
-    }
-}
-
-function stopPreview(element) {
-    const video = element.querySelector('.card-video');
-    if (video) {
-        element.classList.remove('playing');
-        video.pause();
-        video.currentTime = 0;
-    }
-}
-
 // ---------------------------------------------------------
+
 // Cargar lista automáticamente al abrir la página
 // ---------------------------------------------------------
 cargarProyectos();
