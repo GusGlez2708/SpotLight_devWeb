@@ -166,8 +166,8 @@ async function cargarProyectos() {
 
             card.innerHTML = `
                 <div class="card-media" onmouseenter="playPreview(this)" onmouseleave="stopPreview(this)">
-                    <img src="${p.imageUrl || 'logo.png'}" alt="Project Image" class="card-image" loading="lazy" />
-                    ${p.previewVideoUrl ? `<video src="${p.previewVideoUrl}" class="card-video" muted loop playsinline></video>` : ''}
+                    <img src="${getDirectMediaUrl(p.imageUrl) || 'logo.png'}" alt="Project Image" class="card-image" loading="lazy" />
+                    ${p.previewVideoUrl ? `<video src="${getDirectMediaUrl(p.previewVideoUrl)}" class="card-video" muted loop playsinline></video>` : ''}
                 </div>
                 <div class="card-top">
                     <div class="card-info">
@@ -698,8 +698,19 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ---------------------------------------------------------
-// 10. FUNCIONES DE VIDEO PREVIEW (HOVER)
+// 10. FUNCIONES DE MEDIA (IMAGEN/VIDEO PREVIEW)
 // ---------------------------------------------------------
+function getDirectMediaUrl(url) {
+    if (!url) return '';
+    // Extraer el ID del archivo si es de Google Drive
+    const driveRegex = /drive\.google\.com\/file\/d\/([^\/\?]+)/;
+    const match = url.match(driveRegex);
+    if (match && match[1]) {
+        return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    }
+    return url;
+}
+
 function playPreview(element) {
     const video = element.querySelector('.card-video');
     if (video) {
