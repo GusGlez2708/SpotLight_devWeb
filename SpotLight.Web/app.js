@@ -192,7 +192,6 @@ async function cargarProyectos() {
                     </div>
                 </div>
                 
-                <!-- Members & Techs Display -->
                 <div class="card-details" style="margin-bottom: 12px;">
                     ${(p.members && p.members.length > 0) ? `
                         <div class="members-display" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">
